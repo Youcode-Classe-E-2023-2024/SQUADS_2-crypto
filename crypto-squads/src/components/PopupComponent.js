@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import useApiAxios from '../config/axios';
+import PriceChart from './PriceChart';
 
 const PopupComponent = ({ id, onClose }) => {
     const [data, setData] = useState(null);
+    const [DataHistory, setDataHistory] = useState(null);
     
     useEffect(() => {
         fetchAsset();
+        history();
     }, []);
 
     const fetchAsset = () => {
@@ -17,10 +20,19 @@ const PopupComponent = ({ id, onClose }) => {
                 console.error('Error fetching data:', error);
             });
     };
+    const history = () => {
+        useApiAxios.get(`/assets/${id}/history?interval=m1`)
+        .then(response => {
+            setDataHistory(response.data.data);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    };
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
+            <div className="bg-white p-6 rounded-lg shadow-lg min-w-md w-fit">
                 <h2 className="text-xl font-semibold mb-4">Asset Details</h2>
                 {data ? (
                     <div>
@@ -43,8 +55,14 @@ const PopupComponent = ({ id, onClose }) => {
                         </div>
                     </div>
                 ) : (
+                    
                     <p>Loading...</p>
-                )}
+                    )}
+                    {DataHistory?<>
+<PriceChart dataHistory={DataHistory}/>
+                    </>:<>  <p>Chart Loading...</p></>
+
+                    }
                 <button
                     className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
                     onClick={onClose}
