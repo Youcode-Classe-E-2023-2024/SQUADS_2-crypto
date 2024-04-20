@@ -92,7 +92,7 @@ function Exchanges() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
           <div className='flex justify-between py-1'>
-              <h2 className="text-2xl mb-4">Assets</h2>
+              <h2 className="text-2xl mb-4">Exchange</h2>
               <button onClick={() => setShowOnlySocketTrue(!showOnlySocketTrue)}>
                   {showOnlySocketTrue ? "Show All" : "Show Socket Only"}
               </button>
